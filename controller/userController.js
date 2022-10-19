@@ -14,16 +14,16 @@ exports.getUser = (req, res, next) => {
   User.findById(req.params.id).then((User) => {
     res.json(User)
   }).catch((err) => {
-    next(errorHandler.createError(401, "Can't fint this user"))
+    next(errorHandler.createError(401, "Can't find this user"))
   })
 }
 exports.getAllUser = (req, res, next) => {
-  // console.log('hello User middleware')
-  // next()
+
   User.find().then((data => {
     res.json(data)
   })).catch((err) => {
     next(errorHandler.createError(401, "Can't get all user"))
+
   })
 }
 exports.editeUser = (req, res, next) => {
