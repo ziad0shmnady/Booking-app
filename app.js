@@ -22,6 +22,7 @@ app.use('/rooms', roomsRoute)
 app.use('/auth', authRoute)
 app.use('/hotels', hotelsRoute)
 
+
 app.use((err, req, res, next) => {
   errorStatus=err.status ||500
   errorMassage=err.message ||'something is wrong'
