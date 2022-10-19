@@ -4,37 +4,20 @@ const User = require('../models/usersModel')
 const bcrypt = require('bcrypt')
 const strongPass = require('strong-pass-checker')
 const error = require('../utils/error')
-//register user
-router.post('/register', (req, res) => {
-  let { username, email, password, phone, city, country } = req.body
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt)
-  const newuser = new User({
-    username,
-    email,
-    password: hash,
-    phone,
-    city,
-    country
-  })
-  newuser.save().then((user) => {
-    res.json({ message: "success Register" })
-  }).catch((err) => {
-    res.json({ message: err.message })
-  })
-})
-router.post('/login', (req, res, next) => {
-  const user = User.findOne({ username:req.body.username }).then((user) => {
-    if (!user) { return next(error.createError(400, "wrong username or password ")) }
-    const isCorrect = bcrypt.compare(req.body.password, user.password)
-    if (!isCorrect) { return next(error.createError(400, "wrong username or password ")) }
-    res.json({user})
-  })
+const jwt = require('jsonwebtoken')
+const userController = require('../controller/userController')
+const verification = require('../utils/verifyToken')
+//create
+router.post('/addUser', userController.addUser)
+//update
+router.put('/:id', verification.verifyUser, userController.editeUser)
+//delete
+router.delete('/:id', verification.verifyUser, userController.deleteUser)
+//get all
+router.get('/getAllUser', verification.verifyUser, userController.getAllUser)
 
-})
-//get user
-//get all user
-//update user
+//get
+router.get('/:id', userController.getUser)
 
 
 
